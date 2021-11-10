@@ -9,6 +9,7 @@ interface AuthState {
     token: string;
     refreshToken: string;
     username: string;
+    image?: string;
   } | null;
 }
 
@@ -46,6 +47,13 @@ const reducer = (
     }
     case ActionTypeAuth.LOGOUT: {
       return { loading: false, error: null, user: null };
+    }
+    case ActionTypeAuth.ADD_USER_IMAGE: {
+      if (!state.user) {
+        return state;
+      }
+
+      return { ...state, user: { ...state.user, image: action.payload } };
     }
     default:
       return state;

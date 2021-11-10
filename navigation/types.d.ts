@@ -9,7 +9,7 @@ type AuthStackParamList = {
 type MainStackParamList = {
   Start: undefined;
   ChooseOptions: undefined;
-  Quizzes: undefined;
+  Quizzes: { showOnly: boolean };
   Results: undefined;
   Settings: undefined;
   ChangePassword: undefined;

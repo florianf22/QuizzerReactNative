@@ -11,6 +11,7 @@ interface ActionAuthSuccess {
     token: string;
     refreshToken: string;
     username: string;
+    image?: string;
   };
 }
 
@@ -27,9 +28,15 @@ interface ActionAuthLogout {
   type: ActionTypeAuth.LOGOUT;
 }
 
+interface ActionAuthAddUserImage {
+  type: ActionTypeAuth.ADD_USER_IMAGE;
+  payload: string;
+}
+
 export type ActionAuth =
   | ActionAuthInit
   | ActionAuthSuccess
   | ActionAuthError
   | ActionAuthGuestLogin
-  | ActionAuthLogout;
+  | ActionAuthLogout
+  | ActionAuthAddUserImage;

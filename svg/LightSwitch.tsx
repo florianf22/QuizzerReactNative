@@ -1,11 +1,8 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import Animated, {
   interpolateColor,
   useAnimatedStyle,
-  useDerivedValue,
-  useSharedValue,
-  withSpring,
   withTiming,
 } from 'react-native-reanimated';
 import Svg, { SvgProps, Path, G, Circle } from 'react-native-svg';
@@ -18,25 +15,25 @@ interface SvgPropsCustom {
 
 const SvgComponent: React.FC<SvgProps & SvgPropsCustom> = props => {
   const rStyled = useAnimatedStyle(() => {
-    const backgroundColor = interpolateColor(
-      props.colorSharedValue.value,
-      [0, 1],
-      ['#2196f3', '#607d8b']
-    );
+    // const backgroundColor = interpolateColor(
+    //   props.colorSharedValue.value,
+    //   [0, 1],
+    //   ['#2196f3', '#607d8b']
+    // );
 
     return {
       transform: [{ translateY: props.switchPositionY.value }],
     };
   });
 
-  const handleSwitchMove = () => {
+  const handleSwitchMove = useCallback(async () => {
     props.switchPositionY.value = withTiming(
       props.switchPositionY.value === 0 ? props.scrollValue : 0,
       {
         duration: 300,
       }
     );
-  };
+  }, []);
 
   return (
     <TouchableWithoutFeedback onPress={handleSwitchMove}>

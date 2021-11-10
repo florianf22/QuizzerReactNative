@@ -1,29 +1,28 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useCallback } from 'react';
-import { Text, View, StyleSheet, ScrollView } from 'react-native';
+import React, { useCallback, useEffect } from 'react';
+import { ScrollView } from 'react-native';
 import Animated, {
   useAnimatedRef,
   useAnimatedScrollHandler,
   useDerivedValue,
   useSharedValue,
 } from 'react-native-reanimated';
-import Quiz from '../components/Quiz';
-import Spacer from '../components/Spacer';
-import Splash from '../components/Splash';
-import { PAGE_WIDTH } from '../constants/Dimensions';
-import { useTypedSelector } from '../hooks/useTypedSelector';
-import { MainStackParamList } from '../navigation/types';
+import Quiz from '../../components/Quiz';
+import Splash from '../../components/Splash';
+import { PAGE_WIDTH } from '../../constants/Dimensions';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { MainStackParamList } from '../../navigation/types';
+import styles from './styles';
 
 type NavProps = NativeStackScreenProps<MainStackParamList, 'Quizzes'>;
 
 interface QuizzesScreenProps {}
 
-const QuizzesScreen: React.FC<QuizzesScreenProps & NavProps> = ({
-  navigation,
-}) => {
+const QuizzesScreen: React.FC<QuizzesScreenProps & NavProps> = ({ route }) => {
   const { quizzes } = useTypedSelector(state => state.quizzes);
   const translateX = useSharedValue(0);
   const scrollViewRef = useAnimatedRef<ScrollView>();
+  const { showOnly } = route.params;
 
   const activeIndex = useDerivedValue(() => {
     return Math.round(translateX.value / PAGE_WIDTH);
@@ -45,6 +44,10 @@ const QuizzesScreen: React.FC<QuizzesScreenProps & NavProps> = ({
     },
   });
 
+  useEffect(() => {
+    scrollViewRef.current?.scrollTo({ x: 0 });
+  }, [route]);
+
   return (
     <Splash style={styles.container} hideLogo>
       <Animated.ScrollView
@@ -54,29 +57,22 @@ const QuizzesScreen: React.FC<QuizzesScreenProps & NavProps> = ({
         scrollEventThrottle={16}
         showsHorizontalScrollIndicator={false}
         ref={scrollViewRef as any}
+        scrollEnabled={false}
       >
         {quizzes.map((quiz, idx) => (
           <Quiz
             key={idx}
             quiz={quiz}
-            index={idx + 1}
+            index={idx}
             length={quizzes.length}
             onNextSlideClickHandler={onNextSlideClickHandler}
             translateX={translateX}
+            showOnly={showOnly}
           />
         ))}
       </Animated.ScrollView>
-
-      {/* <Spacer type="big" /> */}
     </Splash>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
 
 export default QuizzesScreen;

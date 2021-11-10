@@ -1,4 +1,5 @@
 import { Category } from '../../models/Category';
+import { Options } from '../../models/Options';
 import { Quiz } from '../../models/Quiz';
 import { ActionTypeQuizzes } from '../action-types';
 
@@ -21,8 +22,30 @@ interface ActionQuizzesCategories {
   payload: Category[];
 }
 
+interface ActionTypeUpdateUserOptions {
+  type: ActionTypeQuizzes.UPDATE_USER_OPTIONS;
+  payload: {
+    amount: number;
+    difficulty: string;
+    category: string;
+    type: string;
+  };
+}
+
+interface ActionTypeResetUserOptions {
+  type: ActionTypeQuizzes.RESET_USER_OPTIONS;
+}
+
+interface ActionTypesPopulateOptions {
+  type: ActionTypeQuizzes.POPULATE_OPTIONS;
+  payload: Options;
+}
+
 export type ActionQuizzes =
   | ActionQuizzesInit
   | ActionQuizzesSuccess
   | ActionQuizzesError
-  | ActionQuizzesCategories;
+  | ActionQuizzesCategories
+  | ActionTypeUpdateUserOptions
+  | ActionTypeResetUserOptions
+  | ActionTypesPopulateOptions;

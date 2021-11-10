@@ -10,9 +10,15 @@ import {
   getUserInstance,
   changePasswordInstance,
 } from '../../api/firebase';
-import { verifyToken, storeToken, handleErrorsAccordingly } from './helpers';
+import {
+  verifyToken,
+  storeToken,
+  handleErrorsAccordingly,
+  saveImageToFileSystem,
+  updateUserData,
+  clearToken,
+} from './helpers';
 import { RootState } from '../index';
-import { setTimeout } from './timeouts';
 
 export const guestLogin = () => {
   return {
@@ -100,7 +106,7 @@ export const tryLocalLogin =
     if (response) {
       const { token, refreshToken } = JSON.parse(response);
 
-      // verifyToken(refreshToken, token)(dispatch);
+      verifyToken(refreshToken, token)(dispatch);
     }
   };
 
@@ -136,4 +142,35 @@ export const changePassword =
       makeRequestForPasswordChange,
       { idToken: user!.token, password }
     )(dispatch);
+  };
+
+export const updateImage =
+  (image: string): ThunkAction<void, RootState, never, ActionAuth> =>
+  async (dispatch, getState) => {
+    try {
+      if (getState().auth.user) {
+        const newPath = await saveImageToFileSystem(image);
+        await updateUserData(newPath, getState().auth.user!.token);
+
+        dispatch({
+          type: ActionTypeAuth.ADD_USER_IMAGE,
+          payload: newPath,
+        });
+      }
+    } catch (err: unknown) {
+      console.log(err);
+    }
+  };
+
+export const logout =
+  (): ThunkAction<void, RootState, never, ActionAuth> => async dispatch => {
+    try {
+      await clearToken();
+
+      dispatch({
+        type: ActionTypeAuth.LOGOUT,
+      });
+    } catch (err: unknown) {
+      console.log(err);
+    }
   };

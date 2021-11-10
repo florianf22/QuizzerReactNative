@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import Spacer from './Spacer';
 //
@@ -10,10 +11,11 @@ interface FooterProps {
 }
 
 const Footer: React.FC<FooterProps> = ({ text, onNavigate }) => {
+  const { t } = useTranslation('RegisterScreen');
   return (
     <>
       <Spacer type="big" />
-      <Text style={styles.textSmall}>ან</Text>
+      <Text style={styles.textSmall}>{t('or')}</Text>
 
       <Spacer type="small" />
       <TouchableOpacity onPress={onNavigate}>

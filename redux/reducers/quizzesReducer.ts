@@ -1,50 +1,43 @@
 import { ActionTypeQuizzes } from '../action-types';
 import { ActionQuizzes } from '../actions';
 import { Quiz } from '../../models/Quiz';
-import { Category } from '../../models/Category';
+import { Options } from '../../models/Options';
 
 interface StateType {
   loading: boolean;
   error: string | null;
   quizzes: Quiz[];
-  categories: Category[];
-  // statics
-  types: {
-    name: string;
-    id: string;
-  }[];
-  difficulties: {
-    name: string;
-    id: string;
-  }[];
-  quantities: {
-    name: string;
-    id: string;
-  }[];
+  options: Options;
+  userOptions: {
+    amount: number;
+    difficulty: string;
+    category: string;
+    type: string;
+  };
 }
 
 const initialState: StateType = {
   loading: false,
   error: null,
   quizzes: [],
-  categories: [],
-  types: [
-    { name: 'ოთხი პასუხი', id: 'multiple' },
-    { name: 'თრუ/ფოლსი', id: 'boolean' },
-  ],
-  difficulties: [
-    { name: 'მარტივი', id: 'Easy' },
-    { name: 'საშუალო', id: 'Medium' },
-    { name: 'ძნელი', id: 'Hard' },
-  ],
-  quantities: [
-    { name: 'ხუთი', id: '5' },
-    { name: 'ათი', id: '10' },
-    { name: 'ოცი', id: '20' },
-  ],
+  options: {
+    categories: [],
+    difficulties: [],
+    quantities: [],
+    types: [],
+  },
+  userOptions: {
+    amount: 5,
+    difficulty: 'Easy',
+    category: '9',
+    type: 'multiple',
+  },
 };
 
-const reducer = (state: StateType = initialState, action: ActionQuizzes) => {
+const reducer = (
+  state: StateType = initialState,
+  action: ActionQuizzes
+): StateType => {
   switch (action.type) {
     case ActionTypeQuizzes.INIT: {
       return { ...state, loading: true, error: null, quizzes: [] };
@@ -56,7 +49,30 @@ const reducer = (state: StateType = initialState, action: ActionQuizzes) => {
       return { ...state, loading: false, error: action.payload, quizzes: [] };
     }
     case ActionTypeQuizzes.FETCH_CATEGORIES: {
-      return { ...state, categories: action.payload };
+      return {
+        ...state,
+        options: { ...state.options, categories: action.payload },
+      };
+    }
+    case ActionTypeQuizzes.UPDATE_USER_OPTIONS: {
+      return { ...state, userOptions: action.payload };
+    }
+    case ActionTypeQuizzes.RESET_USER_OPTIONS: {
+      return {
+        ...state,
+        userOptions: {
+          amount: 5,
+          difficulty: 'Easy',
+          category: '9',
+          type: 'multiple',
+        },
+      };
+    }
+    case ActionTypeQuizzes.POPULATE_OPTIONS: {
+      return {
+        ...state,
+        options: action.payload,
+      };
     }
     default:
       return state;

@@ -1,13 +1,7 @@
 import { ActionTypeTimeouts } from '../action-types';
 
-interface addTimeoutId {
-  type: ActionTypeTimeouts.ADD_TIMEOUT_ID;
-  payload: number;
+interface addTime {
+  type: ActionTypeTimeouts.ADD_START_TIME | ActionTypeTimeouts.ADD_END_TIME;
 }
 
-interface removeTimeoutId {
-  type: ActionTypeTimeouts.CLEAR_TIMEOUTS;
-  payload: number;
-}
-
-export type ActionTimeouts = addTimeoutId | removeTimeoutId;
+export type ActionTimeouts = addTime;

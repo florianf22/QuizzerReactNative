@@ -1,9 +1,14 @@
 import { Dispatch } from 'react';
 import * as SecureStore from 'expo-secure-store';
+import * as FileSystem from 'expo-file-system';
 //
 import { ActionAuth } from '../../actions';
 import { ActionTypeAuth } from '../../action-types';
-import { exchangeTokenInstance, getUserInstance } from '../../../api/firebase';
+import {
+  exchangeTokenInstance,
+  getUserInstance,
+  updateProfileInstance,
+} from '../../../api/firebase';
 
 // it has to awaited
 export const storeToken = async (
@@ -17,6 +22,10 @@ export const storeToken = async (
       refreshToken,
     })
   );
+};
+
+export const clearToken = async (): Promise<void> => {
+  SecureStore.deleteItemAsync('token');
 };
 
 export const verifyToken =
@@ -51,6 +60,7 @@ export const verifyToken =
             refreshToken: refresh_token,
             email: userRes.data.users[0].providerUserInfo[0].email,
             username: userRes.data.users[0].providerUserInfo[0].displayName,
+            image: userRes.data.users[0].providerUserInfo[0].photoUrl,
           },
         });
 
@@ -99,5 +109,28 @@ export const handleErrorsAccordingly = (
     }
 
     return true;
+  });
+};
+
+export const saveImageToFileSystem = async (image: string): Promise<string> => {
+  const fileName = image.split('/').pop() as string;
+  const newPath = FileSystem.documentDirectory + fileName;
+
+  await FileSystem.moveAsync({
+    from: image,
+    to: newPath,
+  });
+
+  return newPath;
+};
+
+export const updateUserData = async (
+  image: string,
+  idToken: string
+): Promise<void> => {
+  return updateProfileInstance.post('', {
+    idToken,
+    photoUrl: image,
+    returnSecureToken: true,
   });
 };

@@ -1,3 +1,5 @@
+import { decode } from 'html-entities';
+
 // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 export function shuffle(array: any[]): any[] {
   let currentIndex = array.length,
@@ -20,9 +22,12 @@ export function shuffle(array: any[]): any[] {
 }
 
 export function parser(str: string): string {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+  return decode(str);
+}
+
+export function calculateMinutesBetweenTwoTimeStamps(
+  startTime: number,
+  endTime: number
+): number {
+  return Math.floor((endTime - startTime) / 1000 / 60 / 60 / 1000);
 }

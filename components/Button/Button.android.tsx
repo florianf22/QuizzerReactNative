@@ -7,6 +7,8 @@ import {
 } from 'react-native';
 //
 import Colors from '../../constants/Colors';
+import { PAGE_WIDTH } from '../../constants/Dimensions';
+import useColors from '../../hooks/useColors';
 import Text from '../Text';
 
 interface ButtonProps extends TouchableNativeFeedbackProps {
@@ -16,12 +18,13 @@ interface ButtonProps extends TouchableNativeFeedbackProps {
 }
 
 const Button: React.FC<ButtonProps> = props => {
+  const colors = useColors();
   return (
     <TouchableNativeFeedback {...props}>
       <View
         style={[
           styles.wrapper,
-          { backgroundColor: props.color || Colors.accentGreen },
+          { backgroundColor: props.color || colors.accentGreen },
           props.style,
         ]}
       >
@@ -44,11 +47,10 @@ const HUGE_BUBBLE_SIZE = 90;
 
 const styles = StyleSheet.create({
   wrapper: {
-    backgroundColor: Colors.accentGreen,
     borderRadius: 20,
     paddingVertical: 12,
     paddingHorizontal: 24,
-    minWidth: 225,
+    minWidth: PAGE_WIDTH * 0.3,
     alignItems: 'center',
     overflow: 'hidden',
   },

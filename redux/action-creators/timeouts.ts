@@ -1,10 +1,13 @@
 import { ActionTypeTimeouts } from '../action-types';
 
-export const setTimeout = (timeoutId: NodeJS.Timer) => ({
-  type: ActionTypeTimeouts.ADD_TIMEOUT_ID,
-  payload: timeoutId,
-});
+export const addStartTime = () => {
+  return {
+    type: ActionTypeTimeouts.ADD_START_TIME,
+  };
+};
 
-export const clearTimeouts = () => ({
-  type: ActionTypeTimeouts.CLEAR_TIMEOUTS,
-});
+export const addEndTime = () => {
+  return {
+    type: ActionTypeTimeouts.ADD_END_TIME,
+  };
+};

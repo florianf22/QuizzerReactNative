@@ -8,4 +8,12 @@ interface ActionQuestionsReset {
   type: ActionTypeQuestions.RESET;
 }
 
-export type ActionQuestions = ActionQuestionsCorrect | ActionQuestionsReset;
+interface ActionQuestionAddAnswer {
+  type: ActionTypeQuestions.ADD_ANSWER;
+  payload: string;
+}
+
+export type ActionQuestions =
+  | ActionQuestionsCorrect
+  | ActionQuestionsReset
+  | ActionQuestionAddAnswer;

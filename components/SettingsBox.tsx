@@ -7,49 +7,59 @@ import Spacer from './Spacer';
 import Input from './Input';
 import Colors from '../constants/Colors';
 import { useTypedSelector } from '../hooks/useTypedSelector';
+import { useUploadImage } from '../hooks/useUploadImage';
+import useColors from '../hooks/useColors';
+import { PAGE_WIDTH } from '../constants/Dimensions';
+import { useTranslation } from 'react-i18next';
 
-const inputs = [
-  { name: 'username', displayName: 'სახელი' },
-  { name: 'email', displayName: 'ელ-ფოსტა' },
-] as const;
+const inputs = [{ name: 'username' }, { name: 'email' }] as const;
 
 interface SettingsBoxProps {}
 
 const SettingsBox: React.FC<SettingsBoxProps> = () => {
   const navigation = useNavigation();
   const { user } = useTypedSelector(state => state.auth);
+  const { pickImage } = useUploadImage();
+  const colors = useColors();
+  const { t } = useTranslation('SettingsScreen');
 
   const navigateToPasswordChange = (): void => {
     navigation.navigate('ChangePassword');
   };
 
+  console.log(user?.image);
+
   return (
     <>
-      <Image source={require('../assets/user.png')} style={styles.image} />
+      <TouchableOpacity onPress={pickImage} style={styles.imageWrapper}>
+        {user?.image ? (
+          <Image source={{ uri: user.image }} style={styles.image} />
+        ) : (
+          <Image source={require('../assets/user.png')} />
+        )}
+      </TouchableOpacity>
 
-      <Spacer type="big" />
+      <Spacer type="medium" />
 
-      {inputs.map(({ name, displayName }, idx) => (
+      {inputs.map(({ name }, idx) => (
         <Input
           key={idx}
-          placeholder={Colors.primaryLight}
+          placeholder={colors.primaryLight}
           value={user![name]}
           editable={false}
-          style={styles.input}
+          style={{ color: colors.primaryLight }}
+          marginForLists={5}
         />
       ))}
 
       <TouchableOpacity
-        style={styles.touchable}
+        style={[styles.touchable, { borderColor: colors.accentPurple }]}
         onPress={navigateToPasswordChange}
       >
-        <Text style={styles.text}>შეცვალეთ პაროლი</Text>
-        <AntDesign
-          name="arrowright"
-          size={20}
-          color={Colors.accentPurple}
-          style={{ transform: [{ translateX: 30 }] }}
-        />
+        <Text style={[styles.text, { color: colors.accentPurple }]}>
+          {t('changePassword')}
+        </Text>
+        <AntDesign name="arrowright" size={20} color={colors.accentPurple} />
       </TouchableOpacity>
 
       <Spacer type="big" />
@@ -64,21 +74,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 15,
     paddingHorizontal: 20,
-    borderColor: Colors.accentPurple,
     borderWidth: 1,
-    width: '70%',
     borderRadius: 20,
+    width: PAGE_WIDTH * 0.8,
   },
   text: {
     fontSize: 18,
-    color: Colors.accentPurple,
+  },
+  imageWrapper: {
+    borderRadius: 10,
+    overflow: 'hidden',
   },
   image: {
-    // bad image
-    transform: [{ translateX: 15 }],
-  },
-  input: {
-    color: Colors.primaryLight,
+    height: 150,
+    width: 250,
   },
 });
 

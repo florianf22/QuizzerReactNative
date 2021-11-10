@@ -1,73 +1,69 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Platform } from 'react-native';
-import { Picker, PickerProps } from '@react-native-picker/picker';
+// import { Picker, PickerProps } from '@react-native-picker/picker';
+import RNPickerSelect, { PickerSelectProps } from 'react-native-picker-select';
 //
-import Colors from '../constants/Colors';
 import Text from './Text';
 import { PAGE_WIDTH } from '../constants/Dimensions';
+import useColors from '../hooks/useColors';
+import Spacer from './Spacer';
 
-interface PickerCustomProps extends PickerProps {
-  data: {
-    id: string;
-    name: string;
-  }[];
-  title: string;
-}
-
-// not working on IOS expo - https://github.com/react-native-picker/picker/issues/341
+interface PickerCustomProps extends PickerSelectProps {}
 
 const PickerCustom: React.FC<PickerCustomProps> = props => {
+  const colors = useColors();
+
+  const placeholder = props.items[0];
+  const items = props.items.slice(1);
+
   return (
-    <TouchableOpacity style={styles.container}>
-      <View style={styles.wrapper}>
-        <Text style={styles.text}>{props.title}</Text>
-      </View>
-      <Picker style={styles.picker} {...props}>
-        {props.data.length > 0
-          ? props.data.map(({ name, id }) => (
-              <Picker.Item
-                key={name}
-                style={styles.item}
-                label={name}
-                value={id}
-              />
-            ))
-          : null}
-      </Picker>
-    </TouchableOpacity>
+    <>
+      <RNPickerSelect
+        {...props}
+        style={{
+          placeholder: {
+            ...styles.text,
+            color: colors.primaryLight,
+            fontSize: 18,
+          },
+          viewContainer: {
+            ...styles.container,
+            borderColor: colors.primaryLight,
+          },
+          inputAndroid: {
+            color: colors.primaryLight,
+            fontSize: 18,
+          },
+          inputIOS: {
+            color: colors.primaryLight,
+            borderRadius: 20,
+            paddingHorizontal: 15,
+            paddingVertical: 15,
+            fontSize: 18,
+          },
+        }}
+        items={items}
+        placeholder={placeholder}
+      />
+
+      <Spacer type="small" />
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    position: 'relative',
-  },
-  picker: {
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
-    opacity: 0,
-  },
-  item: {
-    fontFamily: 'MtavruliBold',
-  },
-  wrapper: {
+    width: PAGE_WIDTH * 0.8,
     borderRadius: 20,
-    paddingVertical: 8,
     paddingHorizontal: 15,
     borderWidth: 1,
-    borderColor: Colors.primaryLight,
-    width: '100%',
-    minWidth: PAGE_WIDTH * 0.8,
   },
+  // item: {
+  //   fontFamily: 'MtavruliBold',
+  // },
   text: {
-    color: Colors.primaryLight,
     // textAlign: 'center',
-    fontSize: 20,
-    transform: [{ translateY: 3 }],
+    fontSize: 25,
   },
 });
 

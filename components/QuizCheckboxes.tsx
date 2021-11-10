@@ -3,33 +3,47 @@ import { View, StyleSheet, SafeAreaView } from 'react-native';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { Feather } from '@expo/vector-icons';
 //
-import Colors from '../constants/Colors';
 import Spacer from './Spacer';
+import useColors from '../hooks/useColors';
 
 interface QuizCheckboxesProps {
   answers: string[];
   correctAnswer: string;
   selectedAnswer: string;
-  handleAnswerChoosing: (answer: string) => void;
+  setSelectedAnswer: (answer: string) => void;
+  showOnly: boolean;
 }
 
 const QuizCheckboxes: React.FC<QuizCheckboxesProps> = ({
   answers,
   correctAnswer,
   selectedAnswer,
-  handleAnswerChoosing,
+  setSelectedAnswer,
+  showOnly,
 }) => {
+  const colors = useColors();
+
+  const handleShowOnly = (answer: string): void => {
+    if (showOnly) return;
+
+    setSelectedAnswer(answer);
+  };
+
   const determineColor = (answer: string): string => {
+    if (!showOnly) return colors.primaryMedium;
+
     if (answer === selectedAnswer && selectedAnswer === correctAnswer) {
-      return Colors.accentGreen;
+      return colors.accentGreen;
     } else if (answer === selectedAnswer && selectedAnswer !== correctAnswer) {
-      return Colors.accentPurple;
+      return colors.accentPurple;
     }
 
-    return Colors.primaryMedium;
+    return colors.primaryMedium;
   };
 
   const determineIconComponent = (answer: string): JSX.Element | null => {
+    if (!showOnly) return null;
+
     if (answer === selectedAnswer && selectedAnswer === correctAnswer) {
       return <Feather name="check" size={16} color="#fff" />;
     } else if (answer === selectedAnswer && selectedAnswer !== correctAnswer) {
@@ -46,19 +60,16 @@ const QuizCheckboxes: React.FC<QuizCheckboxesProps> = ({
           <BouncyCheckbox
             size={28}
             fillColor={determineColor(answer)}
-            unfillColor={Colors.primary}
+            unfillColor={colors.primary}
             text={answer}
-            iconStyle={[
-              styles.iconStyleCheckbox,
-              { borderColor: determineColor(answer) },
-            ]}
+            iconStyle={[{ borderColor: determineColor(answer) }]}
             iconComponent={determineIconComponent(answer)}
             textStyle={styles.textStyleCheckbox}
             style={[
               styles.wrapperStyleCheckbox,
               { borderColor: determineColor(answer) },
             ]}
-            onPress={() => handleAnswerChoosing(answer)}
+            onPress={() => handleShowOnly(answer)}
             isChecked={selectedAnswer === answer}
             disableBuiltInState
           />
@@ -74,13 +85,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row-reverse',
     justifyContent: 'space-between',
     borderWidth: 1,
-    borderColor: Colors.primaryMedium,
     paddingVertical: 8,
     paddingLeft: 15,
     borderRadius: 10,
-  },
-  iconStyleCheckbox: {
-    borderColor: Colors.primaryMedium,
   },
   textStyleCheckbox: {
     textDecorationLine: 'none',

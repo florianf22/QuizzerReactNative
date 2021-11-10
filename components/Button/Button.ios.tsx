@@ -5,9 +5,10 @@ import {
   TouchableOpacity,
   TouchableOpacityProps,
 } from 'react-native';
-import Colors from '../../constants/Colors';
+import useColors from '../../hooks/useColors';
 //
 import Text from '../Text';
+import { PAGE_WIDTH } from '../../constants/Dimensions';
 
 interface ButtonProps extends TouchableOpacityProps {
   title: string;
@@ -16,19 +17,20 @@ interface ButtonProps extends TouchableOpacityProps {
 }
 
 const Button: React.FC<ButtonProps> = props => {
+  const colors = useColors();
   return (
     <TouchableOpacity {...props} style={props.style}>
       <View
         style={[
           styles.container,
-          { borderColor: props.color || Colors.accentGreen },
+          { borderColor: props.color || colors.accentGreen },
           props.style,
         ]}
       >
         <Text
           style={[
             styles.text,
-            { fontSize: props.size, color: props.color || Colors.accentGreen },
+            { fontSize: props.size, color: props.color || colors.accentGreen },
           ]}
         >
           {props.title}
@@ -47,6 +49,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderWidth: 1,
+    minWidth: PAGE_WIDTH * 0.3,
   },
   text: {
     fontSize: 18,

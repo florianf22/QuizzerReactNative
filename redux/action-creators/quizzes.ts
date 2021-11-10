@@ -4,6 +4,7 @@ import { ActionTypeQuizzes } from '../action-types';
 import { ActionQuizzes } from '../actions';
 import { triviaBaseInstance, triviaCategoryInstance } from '../../api/trivia';
 import { Category } from '../../models/Category';
+import { Options } from '../../models/Options';
 
 export const fetch =
   (
@@ -35,6 +36,11 @@ export const fetch =
         type: ActionTypeQuizzes.SUCCESS,
         payload: response.data.results,
       });
+
+      dispatch({
+        type: ActionTypeQuizzes.UPDATE_USER_OPTIONS,
+        payload: { amount, difficulty, category, type },
+      });
     } catch (err) {
       // @ts-ignore
       dispatch({
@@ -62,3 +68,16 @@ export const fetchCategories =
       console.log(err);
     }
   };
+
+export const resetUserOptions = () => {
+  return {
+    type: ActionTypeQuizzes.RESET_USER_OPTIONS,
+  };
+};
+
+export const populateOptions = (options: Options) => {
+  return {
+    type: ActionTypeQuizzes.POPULATE_OPTIONS,
+    payload: options,
+  };
+};

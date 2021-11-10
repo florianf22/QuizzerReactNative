@@ -10,10 +10,12 @@ import QuizzesScreen from '../screens/QuizzesScreen';
 import ResultsScreen from '../screens/ResultsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import ChangePasswordScreen from '../screens/ChangePasswordScreen';
+import { useTranslation } from 'react-i18next';
 
 const MainStack = createNativeStackNavigator<MainStackParamList>();
 
 const MainFlow: React.FC = () => {
+  const { t } = useTranslation('NavMainFlow');
   return (
     <MainStack.Navigator>
       <MainStack.Screen
@@ -26,20 +28,16 @@ const MainFlow: React.FC = () => {
 
       <MainStack.Group
         screenOptions={({ navigation }) => ({
-          headerStyle: { backgroundColor: Colors.primary },
           headerShadowVisible: false,
-          headerTintColor: Colors.primaryLight,
           headerTitleAlign: 'left',
-          headerTitleStyle: {
-            //   moves up the text up, not using
-            // fontFamily: 'MtavruliBold',
-            fontWeight: '500',
-          },
         })}
       >
         <MainStack.Screen
           name="ChooseOptions"
           component={ChooseOptionsScreen}
+          options={({ navigation }) => ({
+            headerTitle: t('chooseOptions'),
+          })}
         />
         <MainStack.Screen
           name="Quizzes"
@@ -59,6 +57,7 @@ const MainFlow: React.FC = () => {
         <MainStack.Screen
           name="ChangePassword"
           component={ChangePasswordScreen}
+          options={({ navigation }) => ({ title: t('changePassword') })}
         />
       </MainStack.Group>
     </MainStack.Navigator>

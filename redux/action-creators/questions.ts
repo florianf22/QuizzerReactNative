@@ -11,3 +11,10 @@ export const resetCorrectQuestionQuantity = () => {
     type: ActionTypeQuestions.RESET,
   };
 };
+
+export const addAnswer = (answer: string) => {
+  return {
+    type: ActionTypeQuestions.ADD_ANSWER,
+    payload: answer,
+  };
+};

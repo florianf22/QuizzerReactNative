@@ -20,3 +20,7 @@ export const exchangeTokenInstance = axios.create({
 export const changePasswordInstance = axios.create({
   baseURL: `https://identitytoolkit.googleapis.com/v1/accounts:update?key=${WEB_API_KEY}`,
 });
+
+export const updateProfileInstance = axios.create({
+  baseURL: `https://identitytoolkit.googleapis.com/v1/accounts:update?key=${WEB_API_KEY}`,
+});

@@ -1,16 +1,17 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
 //
 import ChooseAuthScreen from '../screens/ChooseAuthScreen';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import { AuthStackParamList } from './types';
-import Colors from '../constants/Colors';
 
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 
 const AuthFlow: React.FC = () => {
+  const { t } = useTranslation('NavAuthFlow');
   return (
     <AuthStack.Navigator>
       <AuthStack.Screen
@@ -22,26 +23,19 @@ const AuthFlow: React.FC = () => {
       />
       <AuthStack.Group
         screenOptions={({ navigation }) => ({
-          headerStyle: { backgroundColor: Colors.primary },
           headerShadowVisible: false,
-          headerTintColor: Colors.primaryLight,
           headerTitleAlign: 'left',
-          headerTitleStyle: {
-            //   moves up the text up, not using
-            // fontFamily: 'MtavruliBold',
-            fontWeight: '500',
-          },
         })}
       >
         <AuthStack.Screen
           name="Login"
           component={LoginScreen}
-          options={({ navigation }) => ({ title: 'LOGIN TO YOUR ACCOUNT' })}
+          options={({ navigation }) => ({ title: t('login') })}
         />
         <AuthStack.Screen
           name="Register"
           component={RegisterScreen}
-          options={({ navigation }) => ({ title: 'REGISTER' })}
+          options={({ navigation }) => ({ title: t('register') })}
         />
       </AuthStack.Group>
     </AuthStack.Navigator>

@@ -1,23 +1,21 @@
 import React, { useCallback, useEffect } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, Alert } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useFormik } from 'formik';
 //
-import Splash from '../components/Splash';
-import Colors from '../constants/Colors';
-import Button from '../components/Button';
-import Input from '../components/Input';
-import Spacer from '../components/Spacer';
-import Footer from '../components/Footer';
-import { loginValidationSchema as validationSchema } from '../yup';
-import { AuthStackParamList } from '../navigation/types';
-import { useActions } from '../hooks/useActions';
-import { useTypedSelector } from '../hooks/useTypedSelector';
-
-const inputs = [
-  { name: 'email', displayName: 'ელ-ფოსტა' },
-  { name: 'password', displayName: 'პაროლი' },
-] as const;
+import Splash from '../../components/Splash';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
+import Spacer from '../../components/Spacer';
+import Footer from '../../components/Footer';
+import { AuthStackParamList } from '../../navigation/types';
+import { useActions } from '../../hooks/useActions';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
+import styles from './styles';
+import useColors from '../../hooks/useColors';
+import { useStyledNavigation } from '../../hooks/useStyledNavigation';
+import useYup from '../../hooks/useYup';
+import { useTranslation } from 'react-i18next';
 
 type NavProps = NativeStackScreenProps<AuthStackParamList, 'Register'>;
 interface RegisterScreenProps {}
@@ -27,6 +25,14 @@ const RegisterScreen: React.FC<RegisterScreenProps & NavProps> = ({
 }) => {
   const { login } = useActions();
   const { error } = useTypedSelector(state => state.auth);
+  const { loginValidationSchema: validationSchema } = useYup();
+  const { t } = useTranslation('LoginScreen');
+
+  const inputs = [
+    { name: 'email', displayName: t('email') },
+    { name: 'password', displayName: t('password') },
+  ] as const;
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -37,6 +43,8 @@ const RegisterScreen: React.FC<RegisterScreenProps & NavProps> = ({
       login(values.email, values.password);
     },
   });
+  const colors = useColors();
+  useStyledNavigation(navigation);
 
   const navigateToRegister = useCallback(() => {
     navigation.navigate('Register');
@@ -49,13 +57,15 @@ const RegisterScreen: React.FC<RegisterScreenProps & NavProps> = ({
 
   useEffect(() => {
     if (error) {
-      Alert.alert('ვერ შეხვედით სისტემაში 😭', error);
+      Alert.alert(t('loginError'), error);
     }
   }, [error]);
 
   return (
     <View style={{ flex: 1 }}>
-      <Splash style={styles.borderTop} center>
+      <Splash
+        style={[styles.borderTop, { borderTopColor: colors.primaryLight }]}
+      >
         {inputs.map(({ name, displayName }, idx) => (
           <Input
             key={idx}
@@ -64,27 +74,23 @@ const RegisterScreen: React.FC<RegisterScreenProps & NavProps> = ({
             onChangeText={val => onPressHandler(val, name)}
             touched={formik.touched[name]}
             errorMsg={formik.errors[name]}
+            autoCapitalize="none"
+            autoCorrect={false}
+            secure={name.includes('password')}
           />
         ))}
         <Spacer type="medium" />
         <Button
-          title="შესვლა"
+          title={t('login')}
           ghost
-          color={Colors.accentGreen}
+          color={colors.accentGreen}
           onPress={() => formik.handleSubmit()}
         />
 
-        <Footer text="რეგისტრაცია" onNavigate={navigateToRegister} />
+        <Footer text={t('register')} onNavigate={navigateToRegister} />
       </Splash>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  borderTop: {
-    borderTopColor: Colors.primaryLight,
-    borderTopWidth: 1,
-  },
-});
 
 export default RegisterScreen;

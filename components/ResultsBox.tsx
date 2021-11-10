@@ -5,55 +5,89 @@ import { Feather } from '@expo/vector-icons';
 import Text from './Text';
 import Colors from '../constants/Colors';
 import Spacer from './Spacer';
+import useColors from '../hooks/useColors';
+import { PAGE_WIDTH } from '../constants/Dimensions';
+import { useTranslation } from 'react-i18next';
 
 interface ResultsBoxProps {
-  time?: number;
   correctNumberQuantity: number;
   hardQuestionsQuantity: number;
   mediumQuestionsQuantity: number;
   easyQuestionsQuantity: number;
+  minutes?: number;
+  seconds?: number;
 }
 
 const ResultsBox: React.FC<ResultsBoxProps> = ({
-  time,
   correctNumberQuantity,
   hardQuestionsQuantity,
   mediumQuestionsQuantity,
   easyQuestionsQuantity,
+  minutes,
+  seconds,
 }) => {
+  const colors = useColors();
+  const { t } = useTranslation('ResultsScreen');
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { borderColor: colors.primaryLight }]}>
       <View style={styles.results}>
         <View style={[styles.horizontalSpacer, styles.innerResultsWrapper]}>
-          <Text style={[styles.text]}>დრო</Text>
-          <Text style={[styles.text, styles.marginTop]}>2:11</Text>
+          <Text style={[styles.text, { color: colors.primaryLight }]}>
+            {t('time')}
+          </Text>
+          <Text
+            style={[
+              styles.text,
+              { color: colors.primaryLight },
+              styles.marginTop,
+            ]}
+          >
+            {`${minutes}:${seconds}`}
+          </Text>
         </View>
 
         <View style={[styles.horizontalSpacer, styles.innerResultsWrapper]}>
-          <Text style={[styles.text]}>სწორი</Text>
+          <Text style={[styles.text, { color: colors.primaryLight }]}>
+            {t('correct')}
+          </Text>
 
           <View style={[styles.counterContainer, styles.marginTop]}>
             <View
-              style={[styles.icon, { backgroundColor: Colors.accentGreen }]}
+              style={[styles.icon, { backgroundColor: colors.accentGreen }]}
             >
               <Feather name="check" size={18} color="#fff" />
             </View>
-            <Text style={[styles.text, styles.resultText]}>
+            <Text
+              style={[
+                styles.text,
+                { color: colors.primaryLight },
+                styles.resultText,
+              ]}
+            >
               {correctNumberQuantity}
             </Text>
           </View>
         </View>
 
         <View style={[styles.horizontalSpacer, styles.innerResultsWrapper]}>
-          <Text style={[styles.text]}>არასწორი</Text>
+          <Text style={[styles.text, { color: colors.primaryLight }]}>
+            {t('incorrect')}
+          </Text>
 
           <View style={[styles.counterContainer, styles.marginTop]}>
             <View
-              style={[styles.icon, { backgroundColor: Colors.accentPurple }]}
+              style={[styles.icon, { backgroundColor: colors.accentPurple }]}
             >
               <Feather name="x" size={18} color="#fff" />
             </View>
-            <Text style={[styles.text, styles.resultText]}>
+            <Text
+              style={[
+                styles.text,
+                { color: colors.primaryLight },
+                styles.resultText,
+              ]}
+            >
               {hardQuestionsQuantity +
                 mediumQuestionsQuantity +
                 easyQuestionsQuantity -
@@ -66,16 +100,34 @@ const ResultsBox: React.FC<ResultsBoxProps> = ({
       <Spacer type="big" />
 
       <View style={styles.innerResultsWrapper}>
-        <Text style={[styles.text, { color: Colors.primaryMedium }]}>
-          მარტივი: {easyQuestionsQuantity}
+        <Text
+          style={[
+            styles.text,
+            { color: colors.primaryLight },
+            { color: colors.primaryMedium },
+          ]}
+        >
+          {t('easy')}: {easyQuestionsQuantity}
         </Text>
         <Spacer type="small" />
-        <Text style={[styles.text, { color: Colors.accentGreen }]}>
-          საშუალო: {mediumQuestionsQuantity}
+        <Text
+          style={[
+            styles.text,
+            { color: colors.primaryLight },
+            { color: colors.accentGreen },
+          ]}
+        >
+          {t('medium')}: {mediumQuestionsQuantity}
         </Text>
         <Spacer type="small" />
-        <Text style={[styles.text, { color: Colors.accentPurple }]}>
-          რთული: {hardQuestionsQuantity}
+        <Text
+          style={[
+            styles.text,
+            { color: colors.primaryLight },
+            { color: colors.accentPurple },
+          ]}
+        >
+          {t('hard')}: {hardQuestionsQuantity}
         </Text>
       </View>
     </View>
@@ -88,8 +140,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 22,
     borderWidth: 1,
-    borderColor: Colors.primaryLight,
     alignItems: 'center',
+    width: PAGE_WIDTH * 0.8,
   },
   results: {
     flexDirection: 'row',
@@ -118,7 +170,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
-    color: Colors.primaryLight,
   },
   marginTop: {
     marginTop: 5,
