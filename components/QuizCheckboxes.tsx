@@ -5,6 +5,7 @@ import { Feather } from '@expo/vector-icons';
 //
 import Spacer from './Spacer';
 import useColors from '../hooks/useColors';
+import { parser } from '../utils';
 
 interface QuizCheckboxesProps {
   answers: string[];
@@ -61,7 +62,7 @@ const QuizCheckboxes: React.FC<QuizCheckboxesProps> = ({
             size={28}
             fillColor={determineColor(answer)}
             unfillColor={colors.primary}
-            text={answer}
+            text={parser(answer)}
             iconStyle={[{ borderColor: determineColor(answer) }]}
             iconComponent={determineIconComponent(answer)}
             textStyle={styles.textStyleCheckbox}

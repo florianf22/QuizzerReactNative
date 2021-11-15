@@ -1,21 +1,21 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
+import i18next from 'i18next';
 //
 import Splash from '../../components/Splash';
 import Text from '../../components/Text';
 import ResultsBox from '../../components/ResultsBox';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Spacer from '../../components/Spacer';
-import { PAGE_WIDTH } from '../../constants/Dimensions';
 import Button from '../../components/Button';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useActions } from '../../hooks/useActions';
 import styles from './styles';
 import useColors from '../../hooks/useColors';
-import { calculateMinutesBetweenTwoTimeStamps } from '../../utils';
 import { useTranslation } from 'react-i18next';
+import { PAGE_WIDTH } from '../../constants/Dimensions';
 
 interface ResultsScreenProps {}
 
@@ -80,19 +80,43 @@ const ResultsScreen: React.FC<ResultsScreenProps> = () => {
 
       <Spacer type="big" />
 
-      <View style={styles.buttonsWrapper}>
+      <View
+        style={[
+          styles.buttonsWrapper,
+          { flexDirection: i18next.language === 'en' ? 'row' : 'column' },
+        ]}
+      >
         <Button
           title={t('retake')}
           size={22}
           color={colors.primaryMediumDarker}
-          style={styles.button}
+          style={[
+            styles.button,
+            {
+              width:
+                i18next.language === 'en'
+                  ? PAGE_WIDTH * 0.35
+                  : PAGE_WIDTH * 0.6,
+            },
+          ]}
           onPress={handleStart}
         />
+
+        {Platform.OS === 'android' && <Spacer type="medium" />}
+
         <Button
           title={t('next')}
           size={22}
           color={colors.primaryMediumDarker}
-          style={[styles.button]}
+          style={[
+            styles.button,
+            {
+              width:
+                i18next.language === 'en'
+                  ? PAGE_WIDTH * 0.35
+                  : PAGE_WIDTH * 0.6,
+            },
+          ]}
           onPress={handleRestart}
         />
       </View>

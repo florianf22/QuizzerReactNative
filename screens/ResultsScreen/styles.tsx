@@ -19,10 +19,13 @@ export default StyleSheet.create({
   },
   button: {
     padding: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   buttonsWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     width: PAGE_WIDTH * 0.8,
   },
 });

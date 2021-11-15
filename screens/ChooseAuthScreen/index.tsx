@@ -31,10 +31,6 @@ const ChooseAuth: React.FC<ChooseAuthProps & NavProps> = ({ navigation }) => {
     navigation.navigate('Login');
   };
 
-  const handleGuestLogin = (): void => {
-    guestLogin();
-  };
-
   useLayoutEffect(() => {
     Promise.all([retrieveTheme(), tryLocalLogin()]);
   }, []);
@@ -48,6 +44,7 @@ const ChooseAuth: React.FC<ChooseAuthProps & NavProps> = ({ navigation }) => {
           style={styles.button}
           onPress={navigateToLogin}
         />
+        <Spacer type="small" />
         {Platform.OS === 'android' ? <Spacer type="small" /> : null}
         <Button
           title={t('register')}

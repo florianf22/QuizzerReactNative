@@ -27,8 +27,6 @@ const SettingsBox: React.FC<SettingsBoxProps> = () => {
     navigation.navigate('ChangePassword');
   };
 
-  console.log(user?.image);
-
   return (
     <>
       <TouchableOpacity onPress={pickImage} style={styles.imageWrapper}>

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { FontAwesome } from '@expo/vector-icons';
-import i18next from 'i18next';
+import { AntDesign } from '@expo/vector-icons';
 //
 import Splash from '../../components/Splash';
 import Button from '../../components/Button';
@@ -21,6 +21,7 @@ interface StartScreenProps {}
 
 const StartScreen: React.FC<StartScreenProps & NavProps> = ({ navigation }) => {
   const { user } = useTypedSelector(state => state.auth);
+  const { logout } = useActions();
   const colors = useColors();
   const { t } = useTranslation('StartScreen');
 
@@ -44,7 +45,11 @@ const StartScreen: React.FC<StartScreenProps & NavProps> = ({ navigation }) => {
         <TouchableOpacity style={styles.touchable} onPress={navigateToSettings}>
           <FontAwesome name="gear" size={40} color={colors.primaryLight} />
         </TouchableOpacity>
-      ) : null}
+      ) : (
+        <TouchableOpacity style={styles.touchable} onPress={logout}>
+          <AntDesign name="login" size={40} color={colors.primaryLight} />
+        </TouchableOpacity>
+      )}
     </Splash>
   );
 };

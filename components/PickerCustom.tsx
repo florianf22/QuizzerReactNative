@@ -16,6 +16,8 @@ const PickerCustom: React.FC<PickerCustomProps> = props => {
   const placeholder = props.items[0];
   const items = props.items.slice(1);
 
+  console.log(placeholder);
+
   return (
     <>
       <RNPickerSelect

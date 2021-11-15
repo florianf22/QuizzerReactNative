@@ -35,7 +35,7 @@ const Input: React.FC<InputProps> = props => {
           {...props}
           style={[
             styles.input,
-            { borderColor: colors.primaryLight },
+            { borderColor: colors.primaryLight, color: colors.text },
             props.style,
           ]}
           placeholderTextColor={colors.primaryLight}
@@ -67,10 +67,10 @@ const styles = StyleSheet.create({
     width: PAGE_WIDTH * 0.8,
     paddingVertical: 15,
     paddingHorizontal: 20,
+    paddingRight: 55,
     borderRadius: 20,
     borderWidth: 1,
     fontFamily: 'MtavruliBold',
-    color: '#fff',
     fontSize: 18,
   },
   touchable: {

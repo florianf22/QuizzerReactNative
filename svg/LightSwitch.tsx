@@ -11,6 +11,7 @@ interface SvgPropsCustom {
   switchPositionY: Animated.SharedValue<number>;
   colorSharedValue: Animated.SharedValue<number>;
   scrollValue: number;
+  saveTheme: () => Promise<void>;
 }
 
 const SvgComponent: React.FC<SvgProps & SvgPropsCustom> = props => {
@@ -26,13 +27,14 @@ const SvgComponent: React.FC<SvgProps & SvgPropsCustom> = props => {
     };
   });
 
-  const handleSwitchMove = useCallback(async () => {
+  const handleSwitchMove = useCallback(() => {
     props.switchPositionY.value = withTiming(
       props.switchPositionY.value === 0 ? props.scrollValue : 0,
       {
         duration: 300,
       }
     );
+    props.saveTheme();
   }, []);
 
   return (

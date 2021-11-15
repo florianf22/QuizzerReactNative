@@ -38,7 +38,9 @@ const SettingsScreen: React.FC<SettingsScreenProps & NavType> = ({
     theme === 'dark' ? 0 : POSITION_Y_SCROLL_VALUE
   );
   const color = useDerivedValue(() => {
-    return withTiming(switchPositionY.value === -26 ? 0 : 1);
+    return withTiming(
+      switchPositionY.value === POSITION_Y_SCROLL_VALUE ? 0 : 1
+    );
   });
   const colors = useColors();
   const { logout } = useActions();
@@ -56,16 +58,12 @@ const SettingsScreen: React.FC<SettingsScreenProps & NavType> = ({
     };
   });
 
-  useEffect(() => {
-    const listener = navigation.addListener('blur', () => {
-      saveTheme(color.value === 0 ? 'light' : 'dark');
-    });
-
-    return listener;
-  }, [navigation]);
+  const handleSaveTheme = async (): Promise<void> => {
+    saveTheme(color.value === 0 ? 'dark' : 'light');
+  };
 
   const navigateBack = (): void => {
-    navigation.pop();
+    navigation.goBack();
   };
 
   return (
@@ -82,6 +80,7 @@ const SettingsScreen: React.FC<SettingsScreenProps & NavType> = ({
           switchPositionY={switchPositionY}
           colorSharedValue={color}
           scrollValue={POSITION_Y_SCROLL_VALUE}
+          saveTheme={handleSaveTheme}
         />
       </View>
 
